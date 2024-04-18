@@ -31,7 +31,7 @@ public class RequestProcessor
         Identity? identity = WebUtil.ValidateToken(context.Request);
         if (identity is not null)
         {
-            Note? secret = await keyVaultHandler.GetSecret(request.SecretName, identity.Payload.email);
+            Note? secret = await keyVaultHandler.GetSecret(request.SecretName, identity.Payload.unique_name);
             if (secret is null)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -53,7 +53,7 @@ public class RequestProcessor
         Identity? identity = WebUtil.ValidateToken(context.Request);
         if (identity is not null)
         {
-            List<Note> secrets = await keyVaultHandler.GetSecrets(identity.Payload.email);
+            List<Note> secrets = await keyVaultHandler.GetSecrets(identity.Payload.unique_name);
             context.Response.StatusCode = (int)HttpStatusCode.OK;
             await WebUtil.WriteLines(context.Response, JsonConvert.SerializeObject(secrets));
         }
@@ -75,7 +75,7 @@ public class RequestProcessor
         Identity? identity = WebUtil.ValidateToken(context.Request);
         if (identity is not null)
         {
-            AKVHResponse response = await keyVaultHandler.SetSecret(request.SecretName, request.SecretValue, identity.Payload.email);
+            AKVHResponse response = await keyVaultHandler.SetSecret(request.SecretName, request.SecretValue, identity.Payload.unique_name);
             if (response != AKVHResponse.OK)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;
@@ -103,7 +103,7 @@ public class RequestProcessor
         Identity? identity = WebUtil.ValidateToken(context.Request);
         if (identity is not null)
         {
-            AKVHResponse response = await keyVaultHandler.DeleteSecret(request.SecretName, identity.Payload.email);
+            AKVHResponse response = await keyVaultHandler.DeleteSecret(request.SecretName, identity.Payload.unique_name);
             if (response != AKVHResponse.OK)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;
@@ -131,7 +131,7 @@ public class RequestProcessor
         Identity? identity = WebUtil.ValidateToken(context.Request);
         if (identity is not null)
         {
-            AKVHResponse response = await keyVaultHandler.UpdateSecret(request, identity.Payload.email);
+            AKVHResponse response = await keyVaultHandler.UpdateSecret(request, identity.Payload.unique_name);
             if (response != AKVHResponse.OK)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;

@@ -29,8 +29,7 @@ internal class InternalKeyVault
         {
             if (string.IsNullOrEmpty(id))
                 throw new NullReferenceException();
-            string? SecretID;
-            if (secret.Properties.Tags.TryGetValue("id", out SecretID))
+            if (secret.Properties.Tags.TryGetValue("id", out string? SecretID))
             {
                 if (id.Equals(SecretID))
                     return secret;
